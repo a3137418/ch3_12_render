@@ -148,3 +148,7 @@ def delete(request,id):
         return redirect('/index/')
 
     return render(request,"delete.html",locals())
+
+
+def sfas():
+    return HttpResponse("12031040")

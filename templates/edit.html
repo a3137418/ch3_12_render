@@ -1,0 +1,380 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>學生資料管理系統 - 修改資料</title>
+
+<style>
+    :root {
+        --jp-bg: #f7f4ea;
+        --jp-accent: #d26a5c;
+        --jp-accent-soft: #f0d6c8;
+        --jp-border: #e0d6c6;
+        --jp-text-main: #333333;
+        --jp-text-sub: #777777;
+    }
+
+    body {
+        background: radial-gradient(circle at top, #fdfaf4 0, #f5f1e6 40%, #f0ece2 100%);
+        font-family: "Noto Sans TC", "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .page-wrap {
+        max-width: 720px;
+        margin: 40px auto 60px;
+        padding: 0 16px;
+    }
+
+    .header-area {
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+    .header-area h1 {
+        font-size: 1.8rem;
+        letter-spacing: 0.18em;
+        margin-bottom: 4px;
+        color: var(--jp-text-main);
+    }
+
+    .header-sub {
+        font-size: 0.95rem;
+        color: var(--jp-text-sub);
+        letter-spacing: 0.24em;
+        margin-bottom: 6px;
+    }
+
+    .header-links {
+        margin-top: 8px;
+    }
+
+    .btn-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 0.9rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: #fff;
+        color: var(--jp-accent);
+    }
+
+    .btn-link:hover {
+        background: var(--jp-accent-soft);
+        border-color: var(--jp-accent);
+    }
+
+    .btn-back {
+        border-color: var(--jp-border);
+        color: var(--jp-text-sub);
+        background: #fdfbf6;
+    }
+
+    .btn-back:hover {
+        border-color: var(--jp-accent);
+        color: var(--jp-accent);
+    }
+
+    .card {
+        background: #ffffffee;
+        border-radius: 18px;
+        padding: 22px 22px 18px;
+        border: 1px solid var(--jp-border);
+        box-shadow:
+            0 1px 0 rgba(0, 0, 0, 0.02),
+            0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-title {
+        font-size: 1rem;
+        letter-spacing: 0.18em;
+        color: #665240;
+        margin-bottom: 6px;
+        text-align: center;
+    }
+
+    .form-subtitle {
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--jp-text-sub);
+        margin-bottom: 10px;
+    }
+
+    .form-subtitle span {
+        font-weight: 500;
+        color: var(--jp-accent);
+    }
+
+    .form-note {
+        text-align: right;
+        font-size: 0.8rem;
+        color: var(--jp-text-sub);
+        margin-bottom: 8px;
+    }
+
+    .form-note span {
+        color: var(--jp-accent);
+        margin-right: 4px;
+    }
+
+    table.form-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    table.form-table th,
+    table.form-table td {
+        padding: 10px 8px;
+        vertical-align: middle;
+    }
+
+    table.form-table th {
+        width: 26%;
+        text-align: right;
+        padding-right: 10px;
+        font-weight: 500;
+        color: #5c4939;
+        white-space: nowrap;
+    }
+
+    table.form-table th .required-mark {
+        color: var(--jp-accent);
+        margin-right: 2px;
+    }
+
+    table.form-table td {
+        text-align: left;
+    }
+
+    .input-text,
+    .input-date {
+        width: 100%;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--jp-border);
+        background: #fcfaf5;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .input-text:focus,
+    .input-date:focus {
+        border-color: var(--jp-accent);
+        background: #fffdf8;
+        box-shadow: 0 0 0 2px rgba(210, 106, 92, 0.12);
+    }
+
+    .radio-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .radio-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.9rem;
+        color: var(--jp-text-main);
+    }
+
+    .radio-item input[type="radio"] {
+        accent-color: var(--jp-accent);
+        cursor: pointer;
+    }
+
+    .radio-item label {
+        cursor: pointer;
+    }
+
+    .form-actions {
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 90px;
+        padding: 7px 18px;
+        margin: 0 6px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+        background: var(--jp-accent);
+        border-color: var(--jp-accent);
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: #c15649;
+    }
+
+    .btn-secondary {
+        background: #f7f4ea;
+        border-color: var(--jp-border);
+        color: var(--jp-text-sub);
+    }
+
+    .btn-secondary:hover {
+        border-color: var(--jp-accent);
+        color: var(--jp-accent);
+        background: #fdf7ef;
+    }
+
+    @media (max-width: 640px) {
+        .header-area h1 {
+            font-size: 1.5rem;
+        }
+
+        table.form-table th,
+        table.form-table td {
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+
+        table.form-table th {
+            padding-bottom: 4px;
+            padding-left: 4px;
+        }
+
+        table.form-table td {
+            padding-top: 0;
+            padding-bottom: 12px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+    <div class="header-area">
+        <h1>學生資料管理系統</h1>
+        <div class="header-sub">学生情報管理システム</div>
+        <div class="header-links">
+            <a href="/index/" class="btn-link btn-back">回首頁</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="form-title">修改學生資料</div>
+        <div class="form-subtitle">
+            編輯中學號：<span>{{ obj_data.cID }}</span>
+        </div>
+        <div class="form-note">
+            <span>*</span>為必填欄位
+        </div>
+
+        <form action="/edit/{{ obj_data.cID }}/" method="post">
+            {% csrf_token %}
+            <table class="form-table">
+                <tr>
+                    <th>
+                        <span class="required-mark">*</span>姓名
+                    </th>
+                    <td>
+                        <input type="text"
+                               name="cName"
+                               id="cName"
+                               class="input-text"
+                               required
+                               value="{{ obj_data.cName }}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="required-mark">*</span>性別
+                    </th>
+                    <td>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio"
+                                       id="cSexM"
+                                       name="cSex"
+                                       value="M"
+                                       {% if obj_data.cSex == "M" %}checked{% endif %}>
+                                <label for="cSexM">男</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio"
+                                       id="cSexF"
+                                       name="cSex"
+                                       value="F"
+                                       {% if obj_data.cSex == "F" %}checked{% endif %}>
+                                <label for="cSexF">女</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="required-mark">*</span>生日
+                    </th>
+                    <td>
+                        <input type="date"
+                               name="cBirthday"
+                               id="cBirthday"
+                               class="input-date"
+                               required
+                               value="{{ obj_data.cBirthday|date:'Y-m-d' }}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="required-mark">*</span>信箱
+                    </th>
+                    <td>
+                        <input type="text"
+                               name="cEmail"
+                               id="cEmail"
+                               class="input-text"
+                               required
+                               value="{{ obj_data.cEmail }}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>電話</th>
+                    <td>
+                        <input type="text"
+                               name="cPhone"
+                               id="cPhone"
+                               class="input-text"
+                               value="{{ obj_data.cPhone }}">
+                    </td>
+                </tr>
+                <tr>
+                    <th>地址</th>
+                    <td>
+                        <input type="text"
+                               name="cAddr"
+                               id="cAddr"
+                               class="input-text"
+                               value="{{ obj_data.cAddr }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="form-actions">
+                        <button type="submit" class="btn-primary">修改</button>
+                        <button type="reset" class="btn-secondary">清除</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

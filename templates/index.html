@@ -1,0 +1,380 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>學生資料管理系統</title>
+<style>
+    :root {
+        --jp-bg: #f7f4ea;
+        --jp-accent: #d26a5c;
+        --jp-accent-soft: #f0d6c8;
+        --jp-border: #e0d6c6;
+        --jp-text-main: #333333;
+        --jp-text-sub: #777777;
+    }
+
+    body {
+        background: radial-gradient(circle at top, #fdfaf4 0, #f5f1e6 40%, #f0ece2 100%);
+        font-family: "Noto Sans TC", "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .page-wrap {
+        max-width: 1100px;
+        margin: 40px auto 60px;
+        padding: 0 16px;
+    }
+
+    .head_content {
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .head_content h1 {
+        font-size: 2rem;
+        letter-spacing: 0.15em;
+        color: var(--jp-text-main);
+        margin-bottom: 4px;
+    }
+
+    .jp-subtitle {
+        display: inline-block;
+        font-size: 0.95rem;
+        color: var(--jp-text-sub);
+        letter-spacing: 0.25em;
+        margin-bottom: 6px;
+    }
+
+    .head_content h2 {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--jp-text-sub);
+        margin-top: 4px;
+    }
+
+    .tag-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #ffffffcc;
+        border-radius: 999px;
+        border: 1px solid var(--jp-border);
+        padding: 4px 12px;
+        margin-right: 6px;
+    }
+
+    .tag-count-label {
+        font-size: 0.75rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--jp-text-sub);
+    }
+
+    .tag-count-number {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--jp-accent);
+    }
+
+    .btn-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 0.9rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: #fff;
+        color: var(--jp-accent);
+    }
+
+    .btn-link:hover {
+        background: var(--jp-accent-soft);
+        border-color: var(--jp-accent);
+    }
+
+    .btn-new {
+        border-color: var(--jp-accent);
+        font-weight: 500;
+    }
+
+    .search-box {
+        margin-top: 16px;
+        text-align: center;
+    }
+
+    .search-box label {
+        font-size: 0.9rem;
+        color: var(--jp-text-sub);
+        margin-right: 8px;
+    }
+
+    .search-box input[type="search"] {
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--jp-border);
+        min-width: 220px;
+        background: #fcfaf5;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-box input[type="search"]:focus {
+        border-color: var(--jp-accent);
+        box-shadow: 0 0 0 2px rgba(210, 106, 92, 0.12);
+    }
+
+    .search-box button {
+        margin-left: 8px;
+        padding: 6px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--jp-accent);
+        background: var(--jp-accent);
+        color: #fff;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .search-box button:hover {
+        background: #c15649;
+        transform: translateY(-1px);
+    }
+
+    .card {
+        background: #ffffffeb;
+        border-radius: 18px;
+        padding: 18px 18px 10px;
+        border: 1px solid var(--jp-border);
+        box-shadow:
+            0 1px 0 rgba(0, 0, 0, 0.02),
+            0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table.student-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        color: var(--jp-text-main);
+    }
+
+    table.student-table thead {
+        background: linear-gradient(to right, #f7eee2, #f3e2d2);
+    }
+
+    table.student-table th,
+    table.student-table td {
+        border: 1px solid #e6ddcf;
+        padding: 9px 10px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    table.student-table th {
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        font-size: 0.8rem;
+        color: #664e3c;
+    }
+
+    table.student-table tbody tr:nth-child(even) {
+        background-color: #fbf8f2;
+    }
+
+    table.student-table tbody tr:hover {
+        background-color: #f4ece0;
+    }
+
+    .actions-cell {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-edit {
+        border-color: #b2b39b;
+        color: #606144;
+        background: #f7f8ee;
+    }
+
+    .btn-edit:hover {
+        background: #e4e8c9;
+        border-color: #9a9b7b;
+    }
+
+    .btn-delete {
+        border-color: #e6b2a3;
+        color: #b04f40;
+        background: #fdf3ef;
+    }
+
+    .btn-delete:hover {
+        background: #f5ddd2;
+        border-color: #d26a5c;
+    }
+
+    .delete-form {
+        display: inline-block;
+        margin: 0;
+    }
+
+    .pagination {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 0.9rem;
+    }
+
+    .pagination a,
+    .pagination strong {
+        display: inline-block;
+        margin: 0 3px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        text-decoration: none;
+    }
+
+    .pagination a {
+        border: 1px solid transparent;
+        color: var(--jp-text-sub);
+    }
+
+    .pagination a:hover {
+        border-color: var(--jp-accent);
+        background: #fff;
+        color: var(--jp-accent);
+    }
+
+    .pagination strong {
+        background: var(--jp-accent);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .error-message {
+        text-align: center;
+        margin-top: 60px;
+        font-size: 1.2rem;
+        color: var(--jp-text-sub);
+    }
+
+    @media (max-width: 768px) {
+        .head_content h1 {
+            font-size: 1.6rem;
+        }
+
+        .head_content h2 {
+            font-size: 0.9rem;
+        }
+
+        table.student-table th,
+        table.student-table td {
+            padding: 7px 8px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+    <div class="head_content">
+        <h1>學生資料管理系統</h1>
+        <div class="jp-subtitle">学生情報管理システム</div>
+        <h2>
+            <span class="tag-count">
+                <span class="tag-count-label">RECORDS</span>
+                <span class="tag-count-number">{{ data_count }}</span>
+            </span>
+            <a href="/post/" class="btn-link btn-new">新增學生資料</a>
+        </h2>
+
+        <div class="search-box">
+            <form action="/index/" method="get">
+                <label for="site_search">搜尋關鍵字</label>
+                <input type="search" id="site_search" name="site_search" value="{{ site_search|default_if_none:'' }}">
+                <button type="submit">搜尋</button>
+            </form>
+        </div>
+    </div>
+
+    {% if status %}
+    <div class="card">
+        <div class="table-wrapper">
+            <table class="student-table">
+                <thead>
+                    <tr>
+                        <th>學號</th>
+                        <th>姓名</th>
+                        <th>性別</th>
+                        <th>生日</th>
+                        <th>信箱</th>
+                        <th>電話</th>
+                        <th>地址</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in page_obj %}
+                    <tr>
+                        <td>{{ data.cID }}</td>
+                        <td>{{ data.cName }}</td>
+                        <td>{% if data.cSex == "M" %}男{% else %}女{% endif %}</td>
+                        <td>{{ data.cBirthday|date:'Y-m-d' }}</td>
+                        <td>{{ data.cEmail }}</td>
+                        <td>{{ data.cPhone }}</td>
+                        <td>{{ data.cAddr }}</td>
+                        <td>
+                            <div class="actions-cell">
+                                <!-- 編輯：加上結尾的 /，對應 edit/<int:id>/ -->
+                                <a href="/edit/{{ data.cID }}/" class="btn-link btn-edit">編輯</a>
+
+                                <!-- 刪除：用 POST + CSRF，比較安全，並加上確認視窗 -->
+                                <form method="post"
+                                      action="/delete/{{ data.cID }}/"
+                                      class="delete-form"
+                                      onsubmit="return confirm('確定要刪除這筆學生資料嗎？');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-link btn-delete">刪除</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 分頁區塊，修正多餘空白造成的 URL 問題 -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if site_search %}&site_search={{ site_search }}{% endif %}">最前頁</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if site_search %}&site_search={{ site_search }}{% endif %}">上一頁</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <strong>{{ num }}</strong>
+                {% else %}
+                    <a href="?page={{ num }}{% if site_search %}&site_search={{ site_search }}{% endif %}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if site_search %}&site_search={{ site_search }}{% endif %}">下一頁</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if site_search %}&site_search={{ site_search }}{% endif %}">最後頁</a>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+        <div class="error-message">
+            {{ errormessage }}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,7 +90,6 @@ DATABASES = {
     } 
 } 
 
-DATABASES['default'] = dj_database_url.parse("postgresql://ch13_12_django_render_user:vmRE69WYoWt5EQBsAHpvC3W9EZ5EGjVX@dpg-d5a7aajuibrs73bmhjp0-a.oregon-postgres.render.com/ch13_12_django_render")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
